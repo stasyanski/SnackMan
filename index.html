@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snack-Man!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="images/icon.png" type="image/x-icon">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Snack Man!</h1>
+    </header>
+
+    <div class="startDiv">
+        <div class="start">
+            <img src="images/icon.png" alt="logo">
+            <h1>Start</h1>
+        </div>
+    </div>
+
+    <div class="leaderboard">
+        <h1>LeaderBoard:</h1>
+        <ol>
+            <!-- li elements will appear here created by js -->
+        </ol>
+        <button class="clearScore">Reset Leaderboard</button>
+    </div>
+
+    <main>
+    </main>
+
+    <div class="lives">
+        <h1>Lives:</h1>
+        <ul>
+            <!-- li elements (lives) generated using js -->
+        </ul>
+    </div>
+
+    <div class="score">
+        <h1>Score:</h1>
+        <p>0</p>
+    </div>
+
+    <div class="controls">
+        <button id="lbttn">&#9664;</button> <!-- LEFT -->
+        <button id="ubttn">&#9650;</button> <!-- UP -->
+        <button id="rbttn">&#9654;</button> <!-- RIGHT -->
+        <button id="dbttn">&#9660;</button> <!-- DOWN -->
+    </div>
+
+    <div class="volumeContainer">
+        <!-- additional feature - controlling the game volume -->
+        <label for="volumeContainer">Volume:</label>
+        <input type="range" min="0" max="1" step="0.1" value="1" class="volumeSlider">
+    </div>
+</body>
+
+</html>
