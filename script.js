@@ -62,43 +62,6 @@ let rightPressed = false;
 
 let main = document.querySelector('main');
 
-// 2) Display the five highest player scores in the leaderboard (.leaderboard div).
-// 3) The leaderboard should be organised in order from the highest score to the lowest score.
-function displayScoreLeaderboard() {
-    let leaderboard = document.querySelector('.leaderboard ol');
-    leaderboard.innerHTML = ''                                          // clears the leaderboard, needed for when it updates localstorage and needs redisplaying                           
-
-    let scores = Object.entries(localStorage);                                      // returns an array of arrays which have key value pairs 
-
-    scores.sort(function (array1, array2) {                                             // sorts the scores array in higher to lower order for leaderboard
-        return Number(array2[1]) - Number(array1[1]);                                   // first ensure that scores are numbers before sorting and then compares index 2 of each array until it loops throught all arrays
-    });
-
-    scores = scores.slice(0, 5);                                                    // top 5 scores only; rest are sliced off                           
-
-    for (let score of scores) {
-        let user = score[0].trim();                                              // trims the user name to remove any white space
-
-        if (score[0][0] === ' ') {                                              // checks if the first character of the user is a space, if it is, it adds a dot before the user name
-            user = '.' + user; }
-        if (score[0][score[0].length - 1] === ' ') {                            // same check but for the last character of the user name, for aesthetic purposes to keep the leaderboard consistent
-            user = user + '.'; }
-
-        user = user.slice(0, 15);                                               // slices the user name to 15 , only 20 chars, 5 for score, 15 for user name
-        let scoreValue = score[1].toString();                                   // converts the score to a string to be able to check length and concatenate as needed                  
-
-        let totalLength = 20;                                                   // total length of the text on leaderboard (wanted to keep each one equal for consistency)
-        let dotsLength = totalLength - user.length - scoreValue.length;         // calculates how many dots to concatenate between user and score for visual effect
-        let dots = '.'.repeat(dotsLength);
-
-        let text = `${user}${dots}${scoreValue}`;                               // concatenates the user, dots and score using a template literal
-
-        let li = document.createElement('li');
-        li.innerHTML = text;
-        leaderboard.appendChild(li);                                            // appends the li to the leaderboard ol
-    }
-};
-
 // 4) Add the player's lives using JavaScript (not HTML) at the start of the game.
 function addPlayerLivesJS() {
     let heartsCount = 3;                                                      // heart count set to 3 controlled by this variable
@@ -193,13 +156,6 @@ function levelText() {
         }, 3000);
     }, 0);
 }
-
-// additional feature - clearing the scoreboard
-document.querySelector('.clearScore').addEventListener('click', () => {   // event listener onclick for scoreboard clear button
-    document.querySelector('.leaderboard ol').innerHTML = '';                   // clears the text content of the ol in the leaderboard
-    localStorage.clear();                                                       // clears the local storage, removing all the scores to avoid conflicts        
-    displayScoreLeaderboard();                                                  // call the displayScoreLeaderboard function to display the updated leaderboard without entries
-});
 
 // additional feature - IIFE function for game sfx, with volume slider and session storage to keep the volume level consistent
 (() => {
@@ -576,7 +532,7 @@ if (startDiv !== null) {
             if (user != null) {
                 localStorage.setItem(user, score);         // saves the user and score to local storage using a dict 
             }
-            displayScoreLeaderboard();                     // calls to display leaderboard after update to local storage
+            // displayScoreLeaderboard();                     // calls to display leaderboard after update to local storage the call to this fun is in leadrboard.js
         }
 
         //5) When the player collides with an enemy, remove a life instead of ending the game. The player should use the hit animation (.hit css class) and be unable to move for 1.5 secondswhile the animation is being played.
@@ -651,5 +607,4 @@ if (startDiv !== null) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', displayScoreLeaderboard);     // calls displayScoreLeaderboard function on page load
 document.addEventListener('DOMContentLoaded', addPlayerLivesJS);
