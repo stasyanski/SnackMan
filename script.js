@@ -17,22 +17,6 @@
  *   ];
 */
 
-
-// global vars and constants and functions
-let gameMusic = new Audio('sfx/game_music.mp3')
-let pointCollectAudio = new Audio('sfx/point_collect-audacity.mp3');
-
-/* in code references to the audio 
-
-        1. point_collect-audacity.mp3:
-            https://pixabay.com/sound-effects/8-bit-video-game-points-version-1-145826/
-
-        2. game_music.mp3
-            https://pixabay.com/sound-effects/8bit-music-for-game-68698/
-
-*/
-
-let difficulty = 1; // enemy count set to 1 controlled by this variable, global var that is updated throughout
 let maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -62,82 +46,6 @@ let rightPressed = false;
 
 let main = document.querySelector('main');
 
-// 4) Add the player's lives using JavaScript (not HTML) at the start of the game.
-function addPlayerLivesJS() {
-    let heartsCount = 3;                                                      // heart count set to 3 controlled by this variable
-    let livesUL = document.querySelector('.lives ul');
-
-    for (let i = 0; i < heartsCount; i++) {
-        let heart = document.createElement('li');
-        livesUL.appendChild(heart);                                           // appends the heart to the livel ul for each iteration of loop and it iterates 3 times as heartCount is 3                          
-    }
-}
-
-//1) Bonus marks are available if there are an infinite number of levels. These are not premademazes; the maze layout is automatically randomised each time.
-function createMaze() {
-    for (let i = 0; i < 10; i++) {
-        let randArray = Math.floor(Math.random() * numOfRows);
-        let randPos = Math.floor(Math.random() * rowLength);
-
-        if (maze[randArray][randPos] == 0 &&                                                                        // checks if the current indexed pos is 0 therefore wont affect the player which is 2
-            // this condition tests if there are no walls around the position in the 4 corners of the to be placed wall, also checks for out of bounds errors that the console was throwing                        
-            (randArray - 1 < 0 || randPos - 1 < 0 || maze[randArray - 1][randPos - 1] != 1) &&
-            (randArray - 1 < 0 || randPos + 1 >= rowLength || maze[randArray - 1][randPos + 1] != 1) &&             // upper right
-            (randArray + 1 >= numOfRows || randPos - 1 < 0 || maze[randArray + 1][randPos - 1] != 1) &&             // lower left
-            (randArray + 1 >= numOfRows || randPos + 1 >= rowLength || maze[randArray + 1][randPos + 1] != 1)       // lower right
-        ) {
-            maze[randArray][randPos] = 1;                                                                           // if condition is met, set the current to 1 which generates a wall
-            console.log('Wall @ ', randArray, randPos);
-        } else { i--; }
-    }
-}
-createMaze(); // for some reason using document.addEventListener('DOMContentLoaded', createMaze); breaks this function and doesnt work as intended so calling it directly
-
-//1) Randomise the position of enemies at the start of the game.
-function addEnemies(numOfEnemies) {
-    for (let i = 0; i < numOfEnemies; i++) {                    // iterate 3 times to  replace the original 3 enemies with random pos
-        let randArray = Math.floor(Math.random() * numOfRows);
-        let randPos = Math.floor(Math.random() * rowLength);    // rowLength is the max val of the random index 
-
-        // 2) Prevent the enemies from being created outside the maze and only allow them to appearwhere there is a free space (0 in the maze array).
-        if (maze[randArray][randPos] == 0) {                    // check if the current indexed pos is 0
-            maze[randArray][randPos] = 3;                       // if condition is met, set the current to 3 which generates an enemy
-        } else { i--; }                                         // if not met i-- decreases value by 1 which allows for reiteration
-    }
-}
-addEnemies(difficulty); // same here, using DOMContentLoaded breaks the function and doesnt work as intended so calling it directly..
-
-//Populates the maze in the HTML
-function mazePopulate() {
-    for (let y of maze) {
-        for (let x of y) {
-            let block = document.createElement('div');
-            block.classList.add('block');
-
-            switch (x) {
-                case 1:
-                    block.classList.add('wall');
-                    break;
-                case 2:
-                    block.id = 'player';
-                    let mouth = document.createElement('div');
-                    mouth.classList.add('mouth');
-                    block.appendChild(mouth);
-                    break;
-                case 3:
-                    block.classList.add('enemy');
-                    break;
-                default:
-                    block.classList.add('point');
-                    block.style.height = '1vh';
-                    block.style.width = '1vh';
-            }
-            main.appendChild(block);
-        }
-    }
-}
-mazePopulate();
-
 // additional feature - level text is shown on each level, e.g. level 1, good luck
 function levelText() {
     let displayDiv = document.createElement('div');                 // create the text
@@ -156,21 +64,6 @@ function levelText() {
         }, 3000);
     }, 0);
 }
-
-// additional feature - IIFE function for game sfx, with volume slider and session storage to keep the volume level consistent
-(() => {
-    let slider = document.querySelector('.volumeSlider');
-    slider.value = sessionStorage.getItem('volume') || 1;               // get the volume from session storage or set it to 1 if it doesnt exist, consistent volume level
-
-    gameMusic.volume = slider.value;                                    // set audio to the slider value that is retrieved from session storage
-    pointCollectAudio.volume = slider.value;
-
-    slider.addEventListener('input', () => {
-        gameMusic.volume = slider.value;                                // set audio to the slider value
-        pointCollectAudio.volume = slider.value;
-        sessionStorage.setItem('volume', slider.value);                 // store in session storage, needed to that volume does not reset on page reload / refresh
-    });
-})();
 
 // additional feature, prevents collision for 5 seconds after a collision, giving invincibility, invincibility is shows by localplayer opacity pulsating
 function preventCollision() {
@@ -222,8 +115,8 @@ let startDiv = document.querySelector('.startDiv')                      // store
 if (startDiv !== null) {
     function startGame() {                                              // function startGame is created which maps player movement allowing game to function as intended
         levelText();                                                    // call level Text function to display text on each level
-        gameMusic.loop = true;                                          // loops the audio so it plays forever during the game
-        gameMusic.play();                                               // plays the game music when the game starts, cant be called before, as web browsers block autoplaying audio, tested on Edge
+        // gameMusic.loop = true;                                          // loops the audio so it plays forever during the game
+        // gameMusic.play();                                               // plays the game music when the game starts, cant be called before, as web browsers block autoplaying audio, tested on Edge
         let score = 0;                                                  // resets the score to 0 on startgame so that it can be compared with points.length
 
         let player = document.querySelector('#player');
@@ -378,7 +271,7 @@ if (startDiv !== null) {
                     if (points[i].style.opacity != '0.15') {            // check if current point opacity is not 0.15, if it isnt increment score by one and change opacity to 0.15
                         // 5) Update the score for every point the player collects (<p> tag in .score).
                         scoreP.innerHTML = parseInt(scoreP.innerHTML) + 1;
-                        pointCollectAudio.play();                           // plays the point collect audio when playermodel collides with point, this can be controlled by volume slider 
+                        // pointCollectAudio.play();                           // plays the point collect audio when playermodel collides with point, this can be controlled by volume slider 
                         score++;                                            // increment score by 1, score and score p tag is separate so that score can be compaerd to points.length and keep score consistent between levels
                     }
                     points[i].style.opacity = '0.15';
@@ -532,7 +425,7 @@ if (startDiv !== null) {
             if (user != null) {
                 localStorage.setItem(user, score);         // saves the user and score to local storage using a dict 
             }
-            // displayScoreLeaderboard();                     // calls to display leaderboard after update to local storage the call to this fun is in leadrboard.js
+            // leaderboard();                     // calls to display leaderboard after update to local storage the call to this fun is in leadrboard.js
         }
 
         //5) When the player collides with an enemy, remove a life instead of ending the game. The player should use the hit animation (.hit css class) and be unable to move for 1.5 secondswhile the animation is being played.
@@ -606,5 +499,3 @@ if (startDiv !== null) {
         startDiv.style.display = 'none'                                     // sets display none on click event
     }
 }
-
-document.addEventListener('DOMContentLoaded', addPlayerLivesJS);
