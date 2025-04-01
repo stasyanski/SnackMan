@@ -10,3 +10,22 @@
         }, i * 200);                                    // each character is added every 200ms, when i is 1 its 200ms timeout, i++ makes it 2 * 200ms, 3 * 200ms etc so each character is added every 200ms
     }
 })();
+
+// additional feature - level text is shown on each level, e.g. level 1, good luck
+function levelText() {
+    let displayDiv = document.createElement('div');                 // create the text
+    displayDiv.innerHTML = `LEVEL ${difficulty}! GOOD LUCK`;
+    displayDiv.className = 'level-text';                            // add the css properties to the text
+
+    document.body.appendChild(displayDiv);                          // display the text on the screen
+
+    setTimeout(() => {                                              // fade in effect for the text
+        displayDiv.style.opacity = '1';
+        setTimeout(() => {
+            displayDiv.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(displayDiv);              // removes the text so it can be redisplayed and avoid conflicts like pointer events
+            }, 2000);
+        }, 3000);
+    }, 0);
+}
