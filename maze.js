@@ -39,7 +39,7 @@ function createMaze() {
 createMaze();
 
 function mazeMatrixPopulate() {
-    const main = document.getElementById('main'); // assuming you have a main container in your HTML
+    const main = document.querySelector('main');
     for (let y of mazeMatrix) {
         for (let x of y) {
             let block = document.createElement('div');

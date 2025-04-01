@@ -1,20 +1,8 @@
 //Player = 2, Wall = 1, Enemy = 3, Point = 0
 
 /*
- *  Original maze provided with as2.zip, 3 enemies, 1 player, 50 points, 10 walls.
+ *  Original newMaze provided with as2.zip, 3 enemies, 1 player, 50 points, 10 walls.
  *
- *  let maze = [
- *       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
- *       [1, 2, 0, 1, 0, 0, 0, 0, 3, 1],
- *       [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
- *       [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
- *       [1, 0, 1, 1, 0, 0, 0, 0, 0, 1],
- *       [1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
- *       [1, 0, 0, 1, 0, 3, 0, 0, 0, 1],
- *       [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
- *       [1, 3, 1, 0, 0, 0, 0, 0, 0, 1],
- *       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
- *   ];
 */
 
 let maze = [
