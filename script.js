@@ -82,20 +82,6 @@ function preventCollision() {
         player.style.opacity = '1';                                       // re sets the player opacity back to 1 after 5 seconds of invincibility                      
     }, 5000);
 }
-
-// additional feature - IIFE dynamic title, each letter is displayed one by one, creates cool effect / type writer effect
-(() => {
-    let title = document.querySelector('header h1');
-    let titleText = title.innerHTML;                    // store the title text as a var to be used to dynamically display
-    title.innerHTML = '';                               // clears the title text so it can be added one by one
-
-    for (let i = 0; i < titleText.length; i++) {
-       setTimeout(() => {
-            title.innerHTML += titleText[i];            // adds each character to the title one by one with every timeout
-        }, i * 200);                                    // each character is added every 200ms, when i is 1 its 200ms timeout, i++ makes it 2 * 200ms, 3 * 200ms etc so each character is added every 200ms
-    }
-})();
-
 // 1) When the start button is pressed, the game should begin, and the start button should nolonger be visible.
 // 2) The player should not be able to move until the start button has been pressed.
 let startDiv = document.querySelector('.startDiv')                      // store startDiv as a variable to be used in function and listener
