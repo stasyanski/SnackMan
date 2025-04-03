@@ -111,62 +111,50 @@ function startPlayerMovement() {
     playerMovementInterval = setInterval(movePlayer, 10);
 }
 
+
 function movePlayer() {
     const position = player.getBoundingClientRect();
-    if (downPressed) moveDown(position);
-    else if (upPressed) moveUp(position);
-    else if (leftPressed) moveLeft(position);
-    else if (rightPressed) moveRight(position);
-}
-
-function moveDown(position) {
-    const newBottom = position.bottom + 1;
-    if (canMove(position.left, newBottom, 'down')) {
-        playerTop++;
-        player.style.top = playerTop + 'px';
-        playerMouth.classList = 'down';
+    if (downPressed) {
+        movePlayerInDirection(position, 0, 1, 'down');
+    } else if (upPressed) {
+        movePlayerInDirection(position, 0, -1, 'up');
+    } else if (leftPressed) {
+        movePlayerInDirection(position, -1, 0, 'left');
+    } else if (rightPressed) {
+        movePlayerInDirection(position, 1, 0, 'right');
     }
 }
 
-function moveUp(position) {
-    const newTop = position.top - 1;
-    if (canMove(position.left, newTop, 'up')) {
-        playerTop--;
-        player.style.top = playerTop + 'px';
-        playerMouth.classList = 'up';
-    }
-}
+function movePlayerInDirection(position, deltaX, deltaY, direction) {
+    const newLeft = position.left + deltaX;
+    const newTop = position.top + deltaY;
+    const newRight = position.right + deltaX;
+    const newBottom = position.bottom + deltaY;
 
-function moveLeft(position) {
-    const newLeft = position.left - 1;
-    if (canMove(newLeft, position.top, 'left')) {
-        playerLeft--;
+    const pointsToCheck = [
+        { x: newLeft, y: newTop }, 
+        { x: newRight, y: newTop },
+        { x: newLeft, y: newBottom }, 
+        { x: newRight, y: newBottom }, 
+    ];
+
+    if (canMove(pointsToCheck)) {
+        playerLeft += deltaX;
+        playerTop += deltaY;
         player.style.left = playerLeft + 'px';
-        playerMouth.classList = 'left';
+        player.style.top = playerTop + 'px';
+        playerMouth.className = direction; 
     }
 }
 
-function moveRight(position) {
-    const newRight = position.right + 1;
-    if (canMove(newRight, position.top, 'right')) {
-        playerLeft++;
-        player.style.left = playerLeft + 'px';
-        playerMouth.classList = 'right';
+function canMove(points) {
+    for (const point of points) {
+        const element = document.elementFromPoint(point.x, point.y);
+        if (element && element.classList.contains('wall')) {
+            return false; 
+        }
     }
-}
-
-function canMove(newX, newY, direction) {
-    const left = direction === 'left';
-    const right = direction === 'right';
-    
-    const btmL = document.elementFromPoint(newX, newY + (left ? 0 : 1));
-    const btmR = document.elementFromPoint(newX + (right ? 1 : 0), newY + (left ? 0 : 1));
-    
-    return (
-        btmL && btmR &&
-        !btmL.classList.contains('wall') &&
-        !btmR.classList.contains('wall')
-    );
+    return true; 
 }
 
 function startPointCollision() {
@@ -181,7 +169,7 @@ function checkPointCollision() {
     points.forEach(point => {
         const pointPos = point.getBoundingClientRect();
         if (isColliding(position, pointPos)) {
-            handlePointCollision(point, scoreP);
+            handlePointCollision(point, scoreP, points);
         }
     });
 }
@@ -195,7 +183,7 @@ function isColliding(position, pointPos) {
     );
 }
 
-function handlePointCollision(point, scoreP) {
+function handlePointCollision(point, scoreP, points) {
     if (point.style.opacity != '0.15') {
         point.style.opacity = '0.15';
         score++;
