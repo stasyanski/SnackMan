@@ -8,25 +8,25 @@
 
 */
 
-const GAME_MUSIC = new Audio('sfx/game_music.mp3')
-const POINT_COLLECT_AUDIO = new Audio('sfx/point_collect-audacity.mp3');
+const gameMusic = new Audio('sfx/game_music.mp3')
+const pointCollectAudio = new Audio('sfx/point_collect-audacity.mp3');
 
-// additional feature - IIFE function for game sfx, with VOLUME SLIDER and session storage to keep the VOLUME level consistent
+// additional feature - IIFE function for game sfx, with VOLUME slider and session storage to keep the VOLUME level consistent
 (() => {    
-    // set the SLIDER value to the VOLUME stored in sessionStorage, default to 1 if not found
-    const SLIDER = document.querySelector('.volumeSlider');
-    const STORED_VOLUME = sessionStorage.getItem('VOLUME') || 1;
-    SLIDER.value = STORED_VOLUME;
+    // set the slider value to the VOLUME stored in sessionStorage, default to 1 if not found
+    const slider = document.querySelector('.volumeSlider');
+    const storedVolume = sessionStorage.getItem('VOLUME') || 1;
+    slider.value = storedVolume;
 
     // set the initial VOLUME for the audio elements
-    GAME_MUSIC.volume = STORED_VOLUME;
-    POINT_COLLECT_AUDIO.volume = STORED_VOLUME;
+    gameMusic.volume = storedVolume;
+    pointCollectAudio.volume = storedVolume;
 
-    // update VOLUME based on SLIDER input and store the value in sessionStorage
-    SLIDER.addEventListener('input', () => {
-        const VOLUME = SLIDER.value;
-        GAME_MUSIC.volume = VOLUME;
-        POINT_COLLECT_AUDIO.volume = VOLUME;
+    // update VOLUME based on slider input and store the value in sessionStorage
+    slider.addEventListener('input', () => {
+        const VOLUME = slider.value;
+        gameMusic.volume = VOLUME;
+        pointCollectAudio.volume = VOLUME;
         sessionStorage.setItem('VOLUME', VOLUME);  // save the new VOLUME value
     });
 })();

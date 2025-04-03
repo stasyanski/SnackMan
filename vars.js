@@ -11,8 +11,8 @@ let mazeMatrix = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
-let numOfRows = mazeMatrix.length;
-let rowLength = mazeMatrix[0].length;
+const numOfRows = mazeMatrix.length;
+const rowLength = mazeMatrix[0].length;
 
 let canCollide = true;                                               // used to prevent multiple collisions from happening in a row, for example, if colliding with an enemy, the player can only collide once
 let collisionStatus = false;                                         // prevents the collision from being called a quintillion times (or however fast js is) over and over while the collision if statement is active
