@@ -1,8 +1,8 @@
 if (startDiv !== null) {
     function startGame() {                                              // function startGame is created which maps player movement allowing game to function as intended
         levelText();                                                    // call level Text function to display text on each level
-        gameMusic.loop = true;                                          // loops the audio so it plays forever during the game
-        gameMusic.play();                                               // plays the game music when the game starts, cant be called before, as web browsers block autoplaying audio, tested on Edge
+        GAME_MUSIC.loop = true;                                          // loops the audio so it plays forever during the game
+        GAME_MUSIC.play();                                               // plays the game music when the game starts, cant be called before, as web browsers block autoplaying audio, tested on Edge
         let score = 0;                                                  // resets the score to 0 on startgame so that it can be compared with points.length
 
         let player = document.querySelector('#player');
@@ -369,7 +369,7 @@ if (startDiv !== null) {
 
             stopInterval();                             // stops all intervals to prevent conflicts
             createMaze();                               // creates a new newMaze layout that is randomly generated
-            addEnemies(difficulty);                     // adds enemies based on difficulty level
+            addEnemies();                     // adds enemies based on difficulty level
             mazePopulate();                             // populates the new newMaze layout in the main div with the html and css elements
             startGame();                                // starts the game again
         }

@@ -20,12 +20,12 @@ let enemyMovementInterval;                                           // global v
 let enemyCollisionInterval;                                          // global var used in the stopInterval function to stop the enemy collision interval
 let movementAllowed = true;                                          // used to disable movement for 1.5sec 
 
-let difficulty = 1; // difficulty level is used for tracking nr of enemies and the text level of the game
+let difficulty = 1; // difficulty level is used for tracking nr of enemies and the text level of the game, and points to take away when there is an additional enemy 
 
 let upPressed = false;
 let downPressed = false;
 let leftPressed = false;
 let rightPressed = false;
 
-let main = document.querySelector('main');
-let startDiv = document.querySelector('.startDiv')                   
+const main = document.querySelector('main');
+const startDiv = document.querySelector('.startDiv')                   
