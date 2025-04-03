@@ -147,11 +147,14 @@ function movePlayerInDirection(position, deltaX, deltaY, direction) {
     }
 }
 
-function canMove(points) {
-    for (const point of points) {
-        const element = document.elementFromPoint(point.x, point.y);
-        if (element && element.classList.contains('wall')) {
-            return false; 
+
+function canMove(pointsToCheck) {
+    if (Array.isArray(pointsToCheck) && typeof pointsToCheck[Symbol.iterator] == 'function') {
+        for (const pointToCheck of pointsToCheck) {
+            const element = document.elementFromPoint(pointToCheck.x, pointToCheck.y);
+            if (element && element.classList.contains('wall')) {
+                return false; 
+            }
         }
     }
     return true; 
