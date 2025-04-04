@@ -131,33 +131,14 @@ function movePlayerInDirection(position, deltaX, deltaY, direction) {
     const newRight = position.right + deltaX;
     const newBottom = position.bottom + deltaY;
 
-    const pointsToCheck = [
-        { x: newLeft, y: newTop }, 
-        { x: newRight, y: newTop },
-        { x: newLeft, y: newBottom }, 
-        { x: newRight, y: newBottom }, 
-    ];
-
-    if (canMove(pointsToCheck)) {
+    // Use canMoveTo for player movement
+    if (canMoveTo({ left: newLeft, right: newRight, top: newTop, bottom: newBottom }, direction)) {
         playerLeft += deltaX;
         playerTop += deltaY;
         player.style.left = playerLeft + 'px';
         player.style.top = playerTop + 'px';
         playerMouth.className = direction; 
     }
-}
-
-
-function canMove(pointsToCheck) {
-    if (Array.isArray(pointsToCheck) && typeof pointsToCheck[Symbol.iterator] == 'function') {
-        for (const pointToCheck of pointsToCheck) {
-            const element = document.elementFromPoint(pointToCheck.x, pointToCheck.y);
-            if (element && element.classList.contains('wall')) {
-                return false; 
-            }
-        }
-    }
-    return true; 
 }
 
 function startPointCollision() {
@@ -196,6 +177,100 @@ function handlePointCollision(point, scoreP, points) {
     }
 }
 
+function startEnemyMovement() {
+    setTimeout(() => {
+        enemyMovementInterval = setInterval(moveEnemies, 1250);
+    }, 4000);
+}
+
+function moveEnemies() {
+    const enemies = document.querySelectorAll('.enemy');
+
+    enemies.forEach(enemy => {
+        let enemyTop = parseInt(enemy.style.top) || 0;
+        let enemyLeft = parseInt(enemy.style.left) || 0;
+        let randDirection = Math.floor(Math.random() * 6);
+        
+        if (enemy.interval) clearInterval(enemy.interval);
+
+        enemy.interval = setInterval(() => {
+            randDirection = moveEnemy(enemy, enemyTop, enemyLeft, randDirection);
+            // Update enemyTop and enemyLeft with the new positions after movement
+            enemyTop = parseInt(enemy.style.top) || 0;
+            enemyLeft = parseInt(enemy.style.left) || 0;
+        }, 10);
+    });
+}
+
+function canMoveTo(rect, direction) {
+    if (direction === 'down') {
+        return !document.elementFromPoint(rect.left, rect.bottom + 1)?.classList.contains('wall') &&
+               !document.elementFromPoint(rect.right, rect.bottom + 1)?.classList.contains('wall');
+    } else if (direction === 'up') {
+        return !document.elementFromPoint(rect.left, rect.top - 1)?.classList.contains('wall') &&
+               !document.elementFromPoint(rect.right, rect.top - 1)?.classList.contains('wall');
+    } else if (direction === 'left') {
+        return !document.elementFromPoint(rect.left - 1, rect.top)?.classList.contains('wall') &&
+               !document.elementFromPoint(rect.left - 1, rect.bottom)?.classList.contains('wall');
+    } else if (direction === 'right') {
+        return !document.elementFromPoint(rect.right + 1, rect.top)?.classList.contains('wall') &&
+               !document.elementFromPoint(rect.right + 1, rect.bottom)?.classList.contains('wall');
+    }
+    return false;
+}
+
+function moveEnemy(enemy, enemyTop, enemyLeft, randDirection) {
+    const enemyRect = enemy.getBoundingClientRect();
+    let canMove = false;
+
+    switch (randDirection) {
+        case 1: // Down
+            canMove = canMoveTo(enemyRect, 'down');
+            if (canMove) {
+                enemyTop++;
+                enemy.style.top = enemyTop + 'px';
+            }
+            break;
+        case 2: // Up
+            canMove = canMoveTo(enemyRect, 'up');
+            if (canMove) {
+                enemyTop--;
+                enemy.style.top = enemyTop + 'px';
+            }
+            break;
+        case 3: // Left
+            canMove = canMoveTo(enemyRect, 'left');
+            if (canMove) {
+                enemyLeft--;
+                enemy.style.left = enemyLeft + 'px';
+            }
+            break;
+        case 4: // Right
+            canMove = canMoveTo(enemyRect, 'right');
+            if (canMove) {
+                enemyLeft++;
+                enemy.style.left = enemyLeft + 'px';
+            }
+            break;
+        case 5: // Do nothing
+            break;
+    }
+
+    if (!canMove) {
+        randDirection = randomExcludeDir(randDirection);
+    }
+
+    return randDirection; // Return the possibly updated direction
+}
+
+function randomExcludeDir(excluded) {
+    let randDirection;
+    do {
+        randDirection = Math.floor(Math.random() * 5);
+    } while (randDirection === excluded);
+    return randDirection;
+}
+
 function startEnemyCollision() {
     enemyCollisionInterval = setInterval(checkEnemyCollision, 10);
 }
@@ -224,69 +299,6 @@ function handleEnemyCollision() {
             collisionStatus = false;
             player.classList.remove('hit');
         }, 1500);
-    }
-}
-
-function startEnemyMovement() {
-    setTimeout(() => {
-        enemyMovementInterval = setInterval(moveEnemies, 1250);
-    }, 4000);
-}
-
-function moveEnemies() {
-    const enemies = document.querySelectorAll('.enemy');
-
-    enemies.forEach(enemy => {
-        let enemyTop = parseInt(enemy.style.top) || 0;
-        let enemyLeft = parseInt(enemy.style.left) || 0;
-        let randDirection = Math.floor(Math.random() * 6);
-        
-        if (enemy.interval) clearInterval(enemy.interval);
-
-        enemy.interval = setInterval(() => {
-            moveEnemy(enemy, enemyTop, enemyLeft, randDirection);
-        }, 10);
-    });
-}
-
-function moveEnemy(enemy, enemyTop, enemyLeft, randDirection) {
-    const enemyRect = enemy.getBoundingClientRect();
-
-    switch (randDirection) {
-        case 1: // Down
-            if (canMove(enemyRect.left, enemyRect.bottom + 1, 'down')) {
-                enemyTop++;
-                enemy.style.top = enemyTop + 'px';
-            } else {
-                randDirection = randomExcludeDir(randDirection);
-            }
-            break;
-        case 2: // Up
-            if (canMove(enemyRect.left, enemyRect.top - 1, 'up')) {
-                enemyTop--;
-                enemy.style.top = enemyTop + 'px';
-            } else {
-                randDirection = randomExcludeDir(randDirection);
-            }
-            break;
-        case 3: // Left
-            if (canMove(enemyRect.left - 1, enemyRect.top, 'left')) {
-                enemyLeft--;
-                enemy.style.left = enemyLeft + 'px';
-            } else {
-                randDirection = randomExcludeDir(randDirection);
-            }
-            break;
-        case 4: // Right
-            if (canMove(enemyRect.right + 1, enemyRect.top, 'right')) {
-                enemyLeft++;
-                enemy.style.left = enemyLeft + 'px';
-            } else {
-                randDirection = randomExcludeDir(randDirection);
-            }
-            break;
-        case 5: // Do nothing
-            break;
     }
 }
 
