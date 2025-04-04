@@ -1,4 +1,3 @@
-
 // additional feature - IIFE dynamic title, each letter is displayed one by one, creating a cool typewriter effect
 (() => {
     const title = document.querySelector('header h1');

@@ -51,3 +51,13 @@ function mazeMatrixPopulate() {
     }
 }
 mazeMatrixPopulate();
+
+function mazeReset() {
+    main.innerHTML = '';
+    difficulty++;
+    stopIntervals();
+    createMaze();
+    addEnemies();
+    mazePopulate();
+    startGame();
+}

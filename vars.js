@@ -21,6 +21,16 @@ let movementAllowed = true;                                          // used to 
 let difficulty = 1; // difficulty level is used for tracking nr of enemies and the text level of the game, and points to take away when there is an additional enemy 
 let score=0;
 
+let player;
+let playerMouth;
+let playerTop = 0;
+let playerLeft = 0;
+
+const gameMusic = new Audio('sfx/game_music.mp3'); 
+const pointCollectAudio = new Audio('sfx/point_collect-audacity.mp3'); 
+
+let playerMovementInterval, pointCollisionInterval, enemyCollisionInterval, enemyMovementInterval;
+
 let upPressed = false;
 let downPressed = false;
 let leftPressed = false;

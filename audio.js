@@ -8,9 +8,6 @@
 
 */
 
-const gameMusic = new Audio('sfx/game_music.mp3')
-const pointCollectAudio = new Audio('sfx/point_collect-audacity.mp3');
-
 // additional feature - IIFE function for game sfx, with VOLUME slider and session storage to keep the VOLUME level consistent
 (() => {    
     // set the slider value to the VOLUME stored in sessionStorage, default to 1 if not found
@@ -30,3 +27,8 @@ const pointCollectAudio = new Audio('sfx/point_collect-audacity.mp3');
         sessionStorage.setItem('VOLUME', VOLUME);  // save the new VOLUME value
     });
 })();
+
+function startGameMusic() {
+    gameMusic.loop = true;
+    gameMusic.play();
+}
