@@ -4,7 +4,7 @@ function createMaze() {
     let retries = 0;
     for (let i = 0; i < 10; i++) {
         if (retries > 100) {
-            console.error('Failed to create maze after 100 retries');
+            console.log('Failed to create maze after 100 retries');
             break;
         }
         const randArray = Math.floor(Math.random() * numOfRows);

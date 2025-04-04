@@ -1,7 +1,7 @@
 function resetScore() {
     score = 0;
-    const scoreP = document.querySelector('.score p');
-    scoreP.innerHTML = '0';
+    // const scoreP = document.querySelector('.score p');
+    // scoreP.innerHTML = '0';
 }
 
 function handlePointCollision(point, scoreP, points) {
