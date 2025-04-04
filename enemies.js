@@ -1,13 +1,22 @@
 function addEnemies() {
+    console.log('Adding enemies for difficulty:', difficulty);
+
+    for (let i = 0; i < mazeMatrix.length; i++) {
+        for (let j = 0; j < mazeMatrix[i].length; j++) {
+            if (mazeMatrix[i][j] === 3) {
+                mazeMatrix[i][j] = 0; 
+            }
+        }
+    }
     for (let i = 0; i < difficulty; i++) {
         const randArray = Math.floor(Math.random() * numOfRows);
         const randPos = Math.floor(Math.random() * rowLength);
 
-        if (mazeMatrix[randArray][randPos] == 0) {
+        if (mazeMatrix[randArray][randPos] === 0) {
             mazeMatrix[randArray][randPos] = 3;
-            console.log('Enemy @ ', randArray, randPos);
+            console.log('Enemy @', randArray, randPos);
         } else {
-            i--;
+            i--; 
         }
     }
 }

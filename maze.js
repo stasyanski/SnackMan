@@ -1,11 +1,15 @@
 
 // create a random maze matrix with walls, player, enemy and points
 function createMaze() {
+    let retries = 0;
     for (let i = 0; i < 10; i++) {
+        if (retries > 100) {
+            console.error('Failed to create maze after 100 retries');
+            break;
+        }
         const randArray = Math.floor(Math.random() * numOfRows);
         const randPos = Math.floor(Math.random() * rowLength);
 
-        // check if the random position is empty (0) and not a player (2) or enemy (3), and if the surrounding positions are walls (1)
         if (mazeMatrix[randArray][randPos] == 0 && mazeMatrix[randArray][randPos] != 2 && mazeMatrix[randArray][randPos] != 3 &&
             (randArray - 1 < 0 || randPos - 1 < 0 || mazeMatrix[randArray - 1][randPos - 1] != 1) &&
             (randArray - 1 < 0 || randPos + 1 >= rowLength || mazeMatrix[randArray - 1][randPos + 1] != 1) &&
@@ -16,6 +20,7 @@ function createMaze() {
             console.log('Wall @ ', randArray, randPos);
         } else {
             i--;
+            retries++;
         }
     }
 }
@@ -58,6 +63,7 @@ function mazeReset() {
     stopIntervals();
     createMaze();
     addEnemies();
-    mazePopulate();
+    mazeMatrixPopulate();
+    initializePlayer();
     startGame();
 }
