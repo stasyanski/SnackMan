@@ -10,7 +10,7 @@ function handlePointCollision(point, scoreP, points) {
         score++;
         scoreP.innerHTML = parseInt(scoreP.innerHTML) + 1;
         pointCollectAudio.play();
-        if (score > 1) {
+        if (score > points.length) {
             mazeReset();
         }
     }
