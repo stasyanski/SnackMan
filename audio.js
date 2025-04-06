@@ -28,6 +28,7 @@
     });
 })();
 
+// function to play the point collect sound
 function startGameMusic() {
     gameMusic.loop = true;
     gameMusic.play();
