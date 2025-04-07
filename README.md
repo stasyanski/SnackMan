@@ -1,4 +1,4 @@
-# SecuroCheck
+# SnackMan
 SnackMan is a PackMan clone made entirely in JavaScript.
 
 <p align="center">
